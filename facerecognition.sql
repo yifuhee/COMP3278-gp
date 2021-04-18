@@ -10,7 +10,7 @@
 use facerecognition;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET time_zone = '+8:00';
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -39,6 +39,9 @@ create table student (
     primary key(uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO student VALUES (1, "JACK", "123@hku.hk", NOW(), NOW());
+INSERT INTO student VALUES (2, "JAMES", "456@hku.hk", NOW(), NOW());
+
 -- # Create TABLE course
 create table course (
     course_id varchar (20) not null,
@@ -50,7 +53,7 @@ create table course (
 
 LOCK TABLES course WRITE;
 /*!40000 ALTER TABLE course DISABLE KEYS */;
-INSERT INTO course VALUES (1, "database management", "2021-1", "this course teaches database management");
+INSERT INTO course VALUES ("COMP3278", "database management", "2021-1", "this course teaches database management");
 /*!40000 ALTER TABLE course ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,6 +68,9 @@ create table student_course_relationship ( -- many to many relationship
     foreign key (uid) references student (uid),
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+insert into student_course_relationship values (1, "COMP3278", "2021-1");
+insert into student_course_relationship values (2, "COMP3278", "2021-1");
 
 -- # Create TABLE teacher
 create table teacher (
@@ -88,13 +94,16 @@ create table teacher_course_relationship(
 	foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB default charset=latin1;
 
+insert into teacher_course_relationship values (1,"COMP3278","2021-1");
+
 -- # Create TABLE lecture
 create table lecture (
     lecture_id int not null,
     course_id varchar (20) not null,
     year_semester varchar (50) not null,
     
-    lecture_date datetime not null, 
+    lecture_date date not null,
+	lecture_start_time time not null,
     lecture_zoomlink varchar(256) not null,
     lecture_address varchar(256) not null, -- face to face classroom address
     lecture_material_link varchar(256) not null,
@@ -104,13 +113,16 @@ create table lecture (
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+insert into lecture values (1, "COMP3278", "2021-1", "2021-04-18", "20:00:00", "zoomlink", "lecture_address", "lecture_material_link", "Wang Wu", "lecturer_msg");
+
 -- # Create TABLE tutorial
 create table tutorial (
     tutorial_id int not null,
     course_id varchar (20) not null,
     year_semester varchar (50) not null,
     
-    tutorial_date datetime not null,
+    tutorial_date date not null,
+	tutorial_start_time time not null,
     tutorial_zoomlink varchar(256) not null,
     tutorial_address varchar(256) not null, -- face to face classroom address
     tutorial_material_link varchar(256) not null,
@@ -119,6 +131,8 @@ create table tutorial (
     primary key (tutorial_id, course_id, year_semester),
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+insert into tutorial values (1, "COMP3278", "2021-1", "2021-04-18", "21:00:00", "zoomlink", "tutorial_address", "tutorial_material_link", "tutor_name", "tutor_msg");
 
 -- # Create TABLE login_history
 create table login_history(
@@ -134,8 +148,8 @@ create table login_history(
 LOCK TABLES student WRITE;
 /*!40000 ALTER TABLE student DISABLE KEYS */;
 
-INSERT INTO student VALUES (1, "JACK", "123@hku.hk", NOW(), NOW());
-INSERT INTO student VALUES (2, "JAMES", "456@hku.hk", NOW(), NOW());
+-- INSERT INTO student VALUES (1, "JACK", "123@hku.hk", NOW(), NOW());
+-- INSERT INTO student VALUES (2, "JAMES", "456@hku.hk", NOW(), NOW());
 -- insert here
 
 /*!40000 ALTER TABLE student ENABLE KEYS */;

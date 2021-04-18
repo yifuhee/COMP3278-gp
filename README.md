@@ -1,4 +1,10 @@
-# Face Recognition
+# COMP3278 Face Recognition Project
+
+*******
+
+
+
+## Setup Instructions:
 
 Face recognition using python and mysql.
 

@@ -225,7 +225,7 @@ while True:
                             result = cursor.fetchall()
                             showCourses(result)
                             
-                            sqlcomm = "select c.course_name, tutorial.tutorial_id, lecture.lecturer_name, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
+                            sqlcomm = "select c.course_name, tutorial.tutorial_id, tutorial.tutor_name, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
                             cursor.execute(sqlcomm)
                             result = cursor.fetchall()
                             showCourses(result)

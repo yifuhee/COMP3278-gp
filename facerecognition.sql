@@ -27,23 +27,17 @@ SET time_zone = "+00:00";
 --
 -- Tables
 --
-DROP TABLE IF EXISTS student_course_relationship, student, course, lecture, tutorial;
+DROP TABLE IF EXISTS student_course_relationship, student, course, lecture, tutorial, teacher, teacher_course_relationship, login_history;
 
 -- # Create TABLE student
 create table student (
     uid int not null,
-    student_name varchar(50) not null,
+    name varchar(50) not null,
     email varchar(80) not null,
-    login_time datetime not null, -- latest login time
-    exit_system_time datetime not null, -- to calculate amount of time spent on our application
+    login_date date not null,
+    login_time time not null,
     primary key(uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-LOCK TABLES student WRITE;
-/*!40000 ALTER TABLE student DISABLE KEYS */;
-INSERT INTO student VALUES (1, "JACK", "123@hku.hk", NOW(), NOW());
-/*!40000 ALTER TABLE student ENABLE KEYS */;
-UNLOCK TABLES;
 
 -- # Create TABLE course
 create table course (
@@ -71,6 +65,28 @@ create table student_course_relationship ( -- many to many relationship
     foreign key (uid) references student (uid),
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- # Create TABLE teacher
+create table teacher (
+    teacher_id int not NULL primary key,
+    name varchar(50) NOT NULL,
+    login_time time NOT NULL,
+    login_date date NOT NULL,
+    email varchar(50) NOT NULL,
+    sex set ('F', 'M') NOT NULL
+) ENGINE=InnoDB default charset=latin1;
+
+insert into teacher values (1, 'Wang Wu', '07:55:20', '2021-04-11', 'wangwu@gmail.com','F');
+
+-- # Create TABLE teacher_course_relationship
+create table teacher_course_relationship(
+	teacher_id int not null,
+	course_id varchar (20) not null,
+	year_semester varchar (50) not null,
+	primary key (teacher_id, course_id, year_semester),
+	foreign key (teacher_id) references teacher (teacher_id),
+	foreign key (course_id,year_semester) references course (course_id, year_semester)
+) ENGINE=InnoDB default charset=latin1;
 
 -- # Create TABLE lecture
 create table lecture (
@@ -103,6 +119,29 @@ create table tutorial (
     primary key (tutorial_id, course_id, year_semester),
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- # Create TABLE login_history
+create table login_history(
+    uid int,
+    login_time datetime,
+    FOREIGN KEY(uid) REFERENCES student(uid)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ---------------------------------------------------------------------------
+
+-- insert your data here
+
+LOCK TABLES student WRITE;
+/*!40000 ALTER TABLE student DISABLE KEYS */;
+
+INSERT INTO student VALUES (1, "JACK", "123@hku.hk", NOW(), NOW());
+INSERT INTO student VALUES (2, "JAMES", "456@hku.hk", NOW(), NOW());
+-- insert here
+
+/*!40000 ALTER TABLE student ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- ---------------------------------------------------------------------------
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

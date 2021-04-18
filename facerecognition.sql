@@ -60,6 +60,8 @@ INSERT INTO course VALUES (1, "database management", "2021-1", "this course teac
 /*!40000 ALTER TABLE course ENABLE KEYS */;
 UNLOCK TABLES;
 
+-- # Create TABLE teacher			    
+			    
 -- # Create TABLE student_course_relationship
 create table student_course_relationship ( -- many to many relationship
 	  uid int not null,

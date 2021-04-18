@@ -1,7 +1,7 @@
 # COMP3278 Face Recognition Project
 
 *******
-
+## Remember to insert your student data at the bottom of facerecognition.sql
 
 
 ## Setup Instructions:

@@ -80,7 +80,7 @@ while True:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), (2))
 
             # Find the student information in the database.
-            select = "SELECT student_id, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Student WHERE name='%s'" % (
+            select = "SELECT uid, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Student WHERE name='%s'" % (
                 name)
             name = cursor.execute(select)
             result = cursor.fetchall()
@@ -94,6 +94,8 @@ while True:
             if data == "error":
                 # the student's data is not in the database
                 print("The student", current_name, "is NOT FOUND in the database.")
+                win.Close()
+                cap.release()
 
             # If the student's information is found in the database
             else:

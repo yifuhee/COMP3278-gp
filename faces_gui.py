@@ -111,7 +111,7 @@ while True:
 
 #@ start 1
                 def showCourses(result):
-                    header_list = ['Course name', 'Course information', 'Teacher', 'ZoomUrl', 'Classroom',
+                    header_list = ['Course name', 'Class information', 'Teacher', 'Class date', 'ZoomUrl', 'Classroom',
                                    'Starting time']
                     layout = [
                         [sg.Text('all courses')],
@@ -130,7 +130,7 @@ while True:
                     layout = [
                         [sg.Text("Course name:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[0]), size=(40, 2), font=('Any', 12))],
-                        [sg.Text("Course information:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
+                        [sg.Text("Class information:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[1]), size=(40, 2), font=('Any', 12))],
                         [sg.Text("Teacher:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[2]), size=(40, 2), font=('Any', 12))],
@@ -220,12 +220,12 @@ while True:
                         
                         else:
                             #no tutorial and no lecture, display timetable
-                            sqlcomm = "select c.course_name, lecture.lecture_id, lecture.lecture_date, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
+                            sqlcomm = "select c.course_name, lecture.lecture_id, lecture.lecturer_name, lecture.lecture_date, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
                             cursor.execute(sqlcomm)
                             result = cursor.fetchall()
                             showCourses(result)
                             
-                            sqlcomm = "select c.course_name, tutorial.tutorial_id, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
+                            sqlcomm = "select c.course_name, tutorial.tutorial_id, lecture.lecturer_name, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
                             cursor.execute(sqlcomm)
                             result = cursor.fetchall()
                             showCourses(result)

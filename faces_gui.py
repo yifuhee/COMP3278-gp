@@ -112,7 +112,7 @@ while True:
 #@ start 1
                 def showCourses(result):
                     header_list = ['Course name', 'Class information', 'Teacher', 'Class date', 'ZoomUrl', 'Classroom',
-                                   'Starting time']
+                                   'Starting time', 'Material link']
                     layout = [
                         [sg.Text('all courses')],
                         [sg.Table(values=result,
@@ -135,12 +135,16 @@ while True:
                         [sg.Text("Teacher:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[2]), size=(40, 2), font=('Any', 12))],
                         [sg.Text("Zoom Url:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
-                         sg.Text("{}".format(cs[3]), font=('Any', 12), click_submits=True, key='zoomUrl',
+                         sg.Text("{}".format(cs[3]), font=('Any', 12), enable_events=True, key='zoomUrl',
                                  text_color='#0000ff'), sg.Open()],
                         [sg.Text("Class room:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[4]), size=(40, 2), font=('Any', 12))],
                         [sg.Text("Starting time:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
                          sg.Text("{}".format(cs[5]), size=(40, 2), font=('Any', 12))],
+                        #bug - the second link does not work
+                        [sg.Text("Lecture/Tutorial notes:", size=(20, 2), font=('Any', 12, 'bold'), text_color='#00ff00'),
+                         sg.Text("{}".format(cs[6]), font=('Any', 12), enable_events=True, key='link',
+                                 text_color='#0000ff'), sg.Open()],
                         [sg.Exit()]]
                     win = sg.Window('Show Details Courses ', layout)
                     while 1:
@@ -182,7 +186,7 @@ while True:
                     break
                 else:
                     # if has lecture within one hour
-                    sqlcomm = "select c.course_name, lecture.lecturer_msg, lecture.lecturer_name, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={}) and curdate()=lecture.lecture_date and lecture.lecture_start_time>curtime() and timediff(lecture.lecture_start_time,curtime())<'01:00:00'".format(data[0])
+                    sqlcomm = "select c.course_name, lecture.lecturer_msg, lecture.lecturer_name, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time, lecture_material_link from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={}) and curdate()=lecture.lecture_date and lecture.lecture_start_time>curtime() and timediff(lecture.lecture_start_time,curtime())<'01:00:00'".format(data[0])
                     cursor.execute(sqlcomm)
                     results = cursor.fetchall()
                     hurryCourse = None
@@ -201,7 +205,7 @@ while True:
                         '''
                     else:
                         # if has tutorial in one hour
-                        sqlcomm = "select c.course_name, tutorial.tutor_msg, tutorial.tutor_name, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={}) and curdate()=tutorial.tutorial_date and tutorial.tutorial_start_time>curtime() and timediff(tutorial.tutorial_start_time,curtime())<'01:00:00'".format(data[0])
+                        sqlcomm = "select c.course_name, tutorial.tutor_msg, tutorial.tutor_name, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time, tutorial_material_link from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={}) and curdate()=tutorial.tutorial_date and tutorial.tutorial_start_time>curtime() and timediff(tutorial.tutorial_start_time,curtime())<'01:00:00'".format(data[0])
                         cursor.execute(sqlcomm)
                         tutorial_results = cursor.fetchall()
                         for x in tutorial_results:
@@ -220,12 +224,12 @@ while True:
                         
                         else:
                             #no tutorial and no lecture, display timetable
-                            sqlcomm = "select c.course_name, lecture.lecture_id, lecture.lecturer_name, lecture.lecture_date, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
+                            sqlcomm = "select c.course_name, lecture.lecture_id, lecture.lecturer_name, lecture.lecture_date, lecture.lecture_zoomlink, lecture.lecture_address, lecture.lecture_start_time, lecture_material_link from course as c, lecture as lecture where c.course_id = lecture.course_id and c.year_semester = lecture.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
                             cursor.execute(sqlcomm)
                             result = cursor.fetchall()
                             showCourses(result)
                             
-                            sqlcomm = "select c.course_name, tutorial.tutorial_id, tutorial.tutor_name, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
+                            sqlcomm = "select c.course_name, tutorial.tutorial_id, tutorial.tutor_name, tutorial.tutorial_date, tutorial.tutorial_zoomlink, tutorial.tutorial_address, tutorial.tutorial_start_time, tutorial_material_link from course as c, tutorial as tutorial where c.course_id = tutorial.course_id and c.year_semester = tutorial.year_semester and (c.course_id, c.year_semester) in ( select course_id, year_semester from student_course_relationship where uid={})".format(data[0])
                             cursor.execute(sqlcomm)
                             result = cursor.fetchall()
                             showCourses(result)

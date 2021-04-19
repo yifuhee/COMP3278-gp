@@ -113,7 +113,7 @@ create table lecture (
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-insert into lecture values ("Lecture 1", "COMP3278", "2021-1", "2021-04-18", "22:00:00", "zoomlink", "lecture_address", "lecture_material_link", "Wang Wu", "lecturer_msg");
+insert into lecture values ("Lecture 1", "COMP3278", "2021-1", "2021-04-19", "11:00:00", "zoomlink", "lecture_address", "lecture_material_link", "Wang Wu", "lecturer_msg");
 
 -- # Create TABLE tutorial
 create table tutorial (
@@ -132,7 +132,7 @@ create table tutorial (
     foreign key (course_id,year_semester) references course (course_id, year_semester)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-insert into tutorial values ("Tutorial 1", "COMP3278", "2021-1", "2021-04-18", "23:00:00", "zoomlink", "tutorial_address", "tutorial_material_link", "tutor_name", "tutor_msg");
+insert into tutorial values ("Tutorial 1", "COMP3278", "2021-1", "2021-04-19", "10:20:00", "zoomlink", "tutorial_address", "tutorial_material_link", "tutor_name", "tutor_msg");
 
 -- # Create TABLE login_history
 create table login_history(

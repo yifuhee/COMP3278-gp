@@ -10,7 +10,7 @@ import PySimpleGUI as sg
 import webbrowser
 
 # 1 Create database connection
-myconn = mysql.connector.connect(host="localhost", user="root", passwd="clearlove7", database="facerecognition")
+myconn = mysql.connector.connect(host="localhost", user="root", passwd="123456", database="facerecognition")
 date = datetime.utcnow()
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
